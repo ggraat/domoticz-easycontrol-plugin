@@ -39,7 +39,7 @@ class EasycontrolPlugin:
             if typename is not None:
                 self.device = Domoticz.Device(Unit=unit, Name=name, TypeName=typename)
             else:
-                self.device = Domoticz.Device(Unit=unit, Name=name, Type=type, SubType=subtype)
+                self.device = Domoticz.Device(Unit=unit, Name=name, Type=type, Subtype=subtype)
             self.endpoint = endpoint
 
     runAgain = 6
