@@ -35,8 +35,11 @@ import requests
 
 class EasycontrolPlugin:
     class DomoticzThermoDevice:
-        def __init__(self, unit, name, typename, endpoint):
-            self.device = Domoticz.Device(Unit=unit, Name=name, TypeName=typename)
+        def __init__(self, unit, endpoint, name, typename=None, type=None, subtype=None):
+            if typename is not None:
+                self.device = Domoticz.Device(Unit=unit, Name=name, TypeName=typename)
+            else:
+                self.device = Domoticz.Device(Unit=unit, Name=name, Type=type, SubType=subtype)
             self.endpoint = endpoint
 
     runAgain = 6
@@ -52,18 +55,15 @@ class EasycontrolPlugin:
             Domoticz.Debugging(0)
 
         self.thermoDevices = (
-            self.DomoticzThermoDevice(1, "Room temperature", "Temperature",
-                                      "/zones/zn1/temperatureActual"),
-            self.DomoticzThermoDevice(2, "Heating setpoint", "Set Point",
-                                      "/zones/zn1/temperatureHeatingSetpoint"),
-            self.DomoticzThermoDevice(3, "Actual supply temperature", "Temperature",
-                                      "/heatSources/actualSupplyTemperature"),
-            self.DomoticzThermoDevice(4, "Supply temperature setpoint", "Set Point",
-                                      "/heatingCircuits/hc1/supplyTemperatureSetpoint"),
-            self.DomoticzThermoDevice(5, "Humidity indoor", "Humidity",
-                                      "/system/sensors/humidity/indoor_h1"),
-            self.DomoticzThermoDevice(6, "Outdoor temperature", "Temperature",
-                                      "/system/sensors/temperatures/outdoor_t1"),
+            self.DomoticzThermoDevice(1, "/zones/zn1/temperatureActual", "Room temperature", "Temperature"),
+            self.DomoticzThermoDevice(2, "/zones/zn1/temperatureHeatingSetpoint", "Heating setpoint", None, 242, 1),
+            self.DomoticzThermoDevice(3, "/heatSources/actualSupplyTemperature", "Actual supply temperature",
+                                      "Temperature"),
+            self.DomoticzThermoDevice(4, "/heatingCircuits/hc1/supplyTemperatureSetpoint",
+                                      "Supply temperature setpoint", None, 242, 1),
+            self.DomoticzThermoDevice(5, "/system/sensors/humidity/indoor_h1", "Humidity indoor", "Humidity"),
+            self.DomoticzThermoDevice(6, "/system/sensors/temperatures/outdoor_t1", "Outdoor temperature",
+                                      "Temperature"),
         )
 
         if (len(Devices) == 0):
